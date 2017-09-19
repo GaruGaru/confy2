@@ -47,11 +47,18 @@ public class Confy {
     private Map<String, Object> configMap;
 
     private Confy(Map<String, Object> configMap) {
-        this.configMap = configMap;
+        this.configMap = normalize(configMap);
     }
 
     private Confy() {
         this(new HashMap<>());
+    }
+
+    private Map<String, Object> normalize(Map<String, Object> source) {
+        Map<String, Object> normalized = new HashMap<>();
+        for (Map.Entry<String, Object> e : source.entrySet())
+            normalized.put(e.getKey().toLowerCase().replaceAll("_", "."), e.getValue());
+        return normalized;
     }
 
     public Object get(String key) {

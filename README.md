@@ -43,6 +43,20 @@
     MyConfiguration conf = Confy.implement(MyConfiguration.class, "myconf.properties", useEnv);
     String host = conf.getHost();
     int port = conf.getPort();  
+    
+### Use the same keys between env and properties!
+
+test.properties
+    
+    my.env=confy
+
+environment 
+
+    MY_ENV=confy-env
+
+Get using same key
+
+    confy.get("my.env"): "confy-env"
 
 ### Installation
 

@@ -32,6 +32,13 @@ public class TestConfy {
     }
 
     @Test
+    public void testCreationFromEnvWithNormalize() {
+        System.setProperty("NORMALIZED_KEY", "env");
+        Confy conf = Confy.create("test-simple-01", true);
+        assertThat(conf.get("normalized.key")).isEqualTo("env");
+    }
+
+    @Test
     public void testCreationFromProperty() {
         String[] keys = new String[]{"testing", "number", "name"};
         System.setProperty("testing", "env");
