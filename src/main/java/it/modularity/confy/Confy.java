@@ -32,6 +32,10 @@ public class Confy {
         return create(new HashMap<>());
     }
 
+    public static Confy create(String props) {
+        return create(props, true);
+    }
+
     public static Confy create() {
         return create("configuration", true);
     }

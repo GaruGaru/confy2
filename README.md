@@ -1,3 +1,66 @@
+
+# Confy
+
+## Typesafe, container ready configurations for java
+
 [![Build Status](https://travis-ci.org/GaruGaru/confy.svg?branch=master)](https://travis-ci.org/GaruGaru/confy2)
 [![codecov](https://codecov.io/gh/GaruGaru/confy2/branch/master/graph/badge.svg)](https://codecov.io/gh/GaruGaru/confy2/branch/master)
 [![](https://jitpack.io/v/GaruGaru/confy2.svg)](https://jitpack.io/#GaruGaru/confy2)
+
+
+### Usage 
+
+#### Define configuration interface
+
+    public interface MyConfiguration {
+    
+        @Param.String(key = "name", defaultValue = "localhost")
+        String getHost();
+    
+        @Param.Integer(key = "port", defaultValue = 0)
+        int getPort();
+    
+        @Param.Float(key = "threshold", defaultValue = 0.5F)
+        float getThreshold();
+    
+    }
+
+#### Make Confy implements methods (by default from env.)
+
+    MyConfiguration conf = Confy.implement(MyConfiguration.class);
+    String host = conf.getHost();
+    int port = conf.getPort();
+
+#### Load from properties
+
+    MyConfiguration conf = Confy.implement(MyConfiguration.class, "myconf.properties");
+    String host = conf.getHost();
+    int port = conf.getPort();
+    
+#### Custom loading
+
+    boolean useEnv = true;
+    MyConfiguration conf = Confy.implement(MyConfiguration.class, "myconf.properties", useEnv);
+    String host = conf.getHost();
+    int port = conf.getPort();  
+
+### Installation
+
+##### Add jitpack repository
+
+	<repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+	
+##### Add dependency 
+
+	<dependency>
+	    <groupId>com.github.GaruGaru</groupId>
+	    <artifactId>confy2</artifactId>
+	    <version>1.0</version>
+	</dependency>
+	
+	
