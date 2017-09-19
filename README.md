@@ -12,6 +12,7 @@
 
 #### Define configuration interface
 
+```java
     public interface MyConfiguration {
     
         @Param.String(key = "name", defaultValue = "localhost")
@@ -24,26 +25,33 @@
         float getThreshold();
     
     }
+```
 
 #### Make Confy implements methods (by default from env.)
 
+```java
     MyConfiguration conf = Confy.implement(MyConfiguration.class);
     String host = conf.getHost();
     int port = conf.getPort();
+```
 
 #### Load from properties
 
+```java
     MyConfiguration conf = Confy.implement(MyConfiguration.class, "myconf.properties");
     String host = conf.getHost();
     int port = conf.getPort();
-    
+``` 
+
 #### Custom loading
 
+```java
     boolean useEnv = true;
     MyConfiguration conf = Confy.implement(MyConfiguration.class, "myconf.properties", useEnv);
     String host = conf.getHost();
     int port = conf.getPort();  
-    
+```
+   
 ### Use the same keys between env and properties!
 
 test.properties
