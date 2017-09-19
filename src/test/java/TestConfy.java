@@ -62,4 +62,30 @@ public class TestConfy {
     public void testCreate() {
         assertThat(Confy.create()).isNotNull();
     }
+
+    @Test
+    public void testPut() {
+        Confy confy = Confy.create();
+        confy.put("test", true);
+        assertThat(confy.toMap()).containsKeys("test");
+        assertThat(confy.get("test")).isEqualTo(true);
+    }
+
+    @Test
+    public void testPutIfAbsent() {
+        Confy confy = Confy.create();
+        confy.put("test", true);
+        confy.putIfNotPresent("test", false);
+        assertThat(confy.toMap()).containsKeys("test");
+        assertThat(confy.get("test")).isEqualTo(true);
+    }
+
+    @Test
+    public void testClear() {
+        Confy confy = Confy.create();
+        confy.put("test", true);
+        confy.clear();
+        assertThat(confy.toMap()).isEmpty();
+    }
+
 }

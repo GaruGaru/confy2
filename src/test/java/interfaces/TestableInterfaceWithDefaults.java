@@ -13,4 +13,7 @@ public interface TestableInterfaceWithDefaults {
     @Param.Float(key = "float", defaultValue = 1.5F)
     float getFloat();
 
+    @Param.Boolean(key="boolean", defaultValue = true)
+    boolean getBoolean();
+
 }

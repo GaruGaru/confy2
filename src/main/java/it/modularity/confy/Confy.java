@@ -81,6 +81,10 @@ public class Confy {
         return new HashMap<>(configMap);
     }
 
+    public void clear(){
+        this.configMap.clear();
+    }
+
     @Override
     public String toString() {
         return "Confy{" +
