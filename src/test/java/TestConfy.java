@@ -16,6 +16,12 @@ public class TestConfy {
     }
 
     @Test
+    public void testCreationFromProperties() {
+        Confy confy = Confy.create("test-single");
+        assertThat(confy.get("single")).isEqualTo("1");
+    }
+
+    @Test
     public void testCreationFromMap() {
         Map<String, Object> map = new HashMap<>();
         map.put("test", "true");
@@ -86,6 +92,11 @@ public class TestConfy {
         confy.put("test", true);
         confy.clear();
         assertThat(confy.toMap()).isEmpty();
+    }
+
+    @Test
+    public void testToString() {
+        assertThat(Confy.create().toString()).isNotEmpty();
     }
 
 }

@@ -29,7 +29,7 @@ public class Confy {
     }
 
     public static Confy empty() {
-        return create(new HashMap<>());
+        return new Confy();
     }
 
     public static Confy create(String props) {

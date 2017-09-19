@@ -43,4 +43,15 @@ public class TestConfyProxy {
 
     }
 
+    @Test(expected = Exception.class)
+    public void testInvalidMethodInvoke() throws Throwable {
+        Confy confy = Confy.create();
+        confy.put("confy", "wow");
+        new ConfyProxy(confy).invoke(
+                confy,
+                Confy.class.getDeclaredMethod("nope"),
+                null
+        );
+    }
+
 }

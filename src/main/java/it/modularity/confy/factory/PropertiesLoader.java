@@ -22,7 +22,7 @@ public class PropertiesLoader {
         return classPath.isPresent() ? classPath : local;
     }
 
-    private static Optional<Properties> fromLocal(String name) {
+    public static Optional<Properties> fromLocal(String name) {
         try {
             Properties properties = new Properties();
             properties.load(new FileInputStream(name));
@@ -32,7 +32,7 @@ public class PropertiesLoader {
         }
     }
 
-    private static Optional<Properties> fromClassPath(String name) {
+    public static Optional<Properties> fromClassPath(String name) {
         try {
             Properties properties = new Properties();
             InputStream res = ClassLoader.getSystemResourceAsStream(name);
