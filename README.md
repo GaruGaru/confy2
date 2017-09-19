@@ -70,15 +70,18 @@ Get using same key
 
 ##### Add jitpack repository
 
+```xml
 	<repositories>
 		<repository>
 		    <id>jitpack.io</id>
 		    <url>https://jitpack.io</url>
 		</repository>
 	</repositories>
-	
+```
+
 ##### Add dependency 
 
+```xml
 	<dependency>
 	    <groupId>com.github.GaruGaru</groupId>
 	    <artifactId>confy2</artifactId>
