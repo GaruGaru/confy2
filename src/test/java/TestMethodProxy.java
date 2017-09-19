@@ -1,4 +1,5 @@
 import interfaces.TestableInterfaceWithDefaults;
+import interfaces.TestableInterfaceWithoutKeys;
 import it.modularity.confy.Confy;
 import org.junit.Test;
 
@@ -15,6 +16,14 @@ public class TestMethodProxy {
         assertThat(impl.getBoolean()).isTrue();
     }
 
+    @Test
+    public void testInterfaceWithoutKeys(){
+        TestableInterfaceWithoutKeys impl = Confy.implement(TestableInterfaceWithoutKeys.class,"test-interface-01");
+        assertThat(impl.getFloat()).isEqualTo(1.5F);
+        assertThat(impl.getString()).isEqualTo("test");
+        assertThat(impl.getInt()).isEqualTo(1);
+        assertThat(impl.getBoolean()).isFalse();
+    }
 
     @Test
     public void testInterfaceWithPropertiesImplementation() {
@@ -23,6 +32,7 @@ public class TestMethodProxy {
         assertThat(impl.getString()).isEqualTo("test");
         assertThat(impl.getBoolean()).isFalse();
     }
+
 
     @Test
     public void testInterfaceWithEnvImpl() {

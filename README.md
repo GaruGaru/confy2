@@ -15,7 +15,7 @@
 ```java
     public interface MyConfiguration {
     
-        @Param.String(key = "name", defaultValue = "localhost")
+        @Param.String() // Key from method name
         String getHost();
     
         @Param.Integer(key = "port", defaultValue = 0)
