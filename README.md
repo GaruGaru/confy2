@@ -59,6 +59,28 @@
         
     }
 ```
+
+### Configurations priority examples
+
+
+##### Args > Environment > Property
+```java
+    MyConfiguration conf = Confy.create()
+                .withProperty("myconf.properties")
+                .withEnv()
+                .withArgs(args)
+                .to(MyConfiguration.class)
+``` 
+
+##### Environment > Args > Property
+```java
+    MyConfiguration conf = Confy.create()
+                .withProperty("myconf.properties")
+                .withArgs(args)
+                .withEnv()
+                .to(MyConfiguration.class)
+``` 
+
    
 ### Use the same keys between env and properties!
 
