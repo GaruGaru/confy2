@@ -8,50 +8,73 @@ import java.util.Map;
 
 public class Confy {
 
+    public static <T> T implement(Class<T> tClass) {
+        return ConfyProxy.proxying(tClass, create());
+    }
+
     public static <T> T implement(Class<T> tClass, Confy confy) {
         return ConfyProxy.proxying(tClass, confy);
     }
 
-    public static <T> T implement(Class<T> tClass, String propName, boolean useEnv) {
-        return implement(tClass, Confy.create(propName, useEnv));
+    public static Confy fromMap(Map<String, Object> map) {
+        return new Confy(map);
     }
 
-    public static <T> T implement(Class<T> tClass, String properties) {
-        return implement(tClass, properties, true);
-    }
-
-    public static <T> T implement(Class<T> tClass) {
-        return implement(tClass, "configuration");
-    }
-
-    public static Confy create(String properties, boolean useEnv) {
-        return create(useEnv ? ConfigFactory.fromEnvAndProperties(properties) : ConfigFactory.fromProperty(properties));
+    public static Confy fromEnv() {
+        return fromMap(ConfigFactory.fromEnv());
     }
 
     public static Confy empty() {
         return new Confy();
     }
 
-    public static Confy create(String props) {
+    public static Confy fromProperty(String props) {
         return create(props, true);
+    }
+
+    public static Confy fromArgs(String... args) {
+        return fromMap(ConfigFactory.fromArgs(args));
     }
 
     public static Confy create() {
         return create("configuration", true);
     }
 
-    public static Confy create(Map<String, Object> map) {
-        return new Confy(map);
+    private static Confy create(String properties, boolean useEnv) {
+        return fromMap(useEnv ? ConfigFactory.fromEnvAndProperties(properties) : ConfigFactory.fromProperty(properties));
     }
 
     private Map<String, Object> configMap;
 
-    private Confy(Map<String, Object> configMap) {
-        this.configMap = normalize(configMap);
-    }
-
     private Confy() {
         this(new HashMap<>());
+    }
+
+    private Confy(Map<String, Object> configMap) {
+        setConfigMap(configMap);
+    }
+
+    public Confy withEnv() {
+        setConfigMap(ConfigFactory.merge(this.configMap, ConfigFactory.fromEnv()));
+        return this;
+    }
+
+    public Confy withArgs(String... args) {
+        setConfigMap(ConfigFactory.merge(this.configMap, ConfigFactory.fromArgs(args)));
+        return this;
+    }
+
+    public Confy withProperty(String property) {
+        setConfigMap(ConfigFactory.fromProperty(property));
+        return this;
+    }
+
+    public <T> T to(Class<T> tClass) {
+        return implement(tClass, this);
+    }
+
+    private void setConfigMap(Map<String, Object> map) {
+        this.configMap = normalize(map);
     }
 
     public Object get(String key) {

@@ -27,7 +27,7 @@
     }
 ```
 
-#### Make Confy implements methods (by default from env.)
+#### Make Confy implements methods (by default from env. and configuration.properties if present)
 
 ```java
     MyConfiguration conf = Confy.implement(MyConfiguration.class);
@@ -35,22 +35,16 @@
     int port = conf.getPort();
 ```
 
-#### Load from properties
+#### Custom loading 
 
 ```java
-    MyConfiguration conf = Confy.implement(MyConfiguration.class, "myconf.properties");
+    MyConfiguration conf = Confy.fromArgs(args)
+                .withProperty("myconf.properties")
+                .withEnv()
+                .to(MyConfiguration.class)
     String host = conf.getHost();
     int port = conf.getPort();
 ``` 
-
-#### Custom loading
-
-```java
-    boolean useEnv = true;
-    MyConfiguration conf = Confy.implement(MyConfiguration.class, "myconf.properties", useEnv);
-    String host = conf.getHost();
-    int port = conf.getPort();  
-```
    
 ### Use the same keys between env and properties!
 

@@ -25,6 +25,21 @@ public class TestConfigFactory {
     }
 
     @Test
+    public void testFromArgs() {
+        String[] args = new String[]{"--log=debug", "test=true", "-str=ing"};
+        Map<String, Object> argsMap = ConfigFactory.fromArgs(args);
+        assertThat(argsMap).hasSize(3);
+        assertThat(argsMap.get("log")).isEqualTo("debug");
+        assertThat(argsMap.get("test")).isEqualTo("true");
+        assertThat(argsMap.get("str")).isEqualTo("ing");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testFromArgsParseException(){
+        ConfigFactory.fromArgs("a b c");
+    }
+
+    @Test
     public void testFromProperty() {
         String[] keys = new String[]{"testing", "number", "name"};
         Map<String, Object> env = ConfigFactory.fromProperty("test-simple-01");
@@ -74,7 +89,7 @@ public class TestConfigFactory {
     }
 
     @Test
-    public void testMapOf(){
+    public void testMapOf() {
         Properties properties = new Properties();
         properties.put("test", "true");
         Map<String, Object> map = ConfigFactory.mapOf(properties);

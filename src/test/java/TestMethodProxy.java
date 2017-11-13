@@ -19,7 +19,7 @@ public class TestMethodProxy {
 
     @Test
     public void testInterfaceWithoutKeys() {
-        TestableInterfaceWithoutKeys impl = Confy.implement(TestableInterfaceWithoutKeys.class, "test-interface-01");
+        TestableInterfaceWithoutKeys impl = Confy.fromProperty("test-interface-01").to(TestableInterfaceWithoutKeys.class);
         assertThat(impl.getFloat()).isEqualTo(1.5F);
         assertThat(impl.getString()).isEqualTo("test");
         assertThat(impl.getInt()).isEqualTo(1);
@@ -28,7 +28,7 @@ public class TestMethodProxy {
 
     @Test
     public void testInterfaceWithPropertiesImplementation() {
-        TestableInterfaceWithDefaults impl = Confy.implement(TestableInterfaceWithDefaults.class, "test-interface-01", false);
+        TestableInterfaceWithDefaults impl = Confy.fromProperty("test-interface-01").to(TestableInterfaceWithDefaults.class);
         assertThat(impl.getInt()).isEqualTo(1);
         assertThat(impl.getString()).isEqualTo("test");
         assertThat(impl.getBoolean()).isFalse();
@@ -41,7 +41,7 @@ public class TestMethodProxy {
         System.setProperty("int", "2");
         System.setProperty("string", "test-env");
         System.setProperty("boolean", "false");
-        TestableInterfaceWithDefaults impl = Confy.implement(TestableInterfaceWithDefaults.class, "test-interface-01", true);
+        TestableInterfaceWithDefaults impl = Confy.fromProperty("test-interface-01").withEnv().to(TestableInterfaceWithDefaults.class);
         assertThat(impl.getInt()).isEqualTo(2);
         assertThat(impl.getString()).isEqualTo("test-env");
         assertThat(impl.getFloat()).isEqualTo(1.1F);
@@ -51,7 +51,7 @@ public class TestMethodProxy {
     @Test(expected = Exception.class)
     public void testFloatParseException() {
         System.setProperty("float", "1.1A");
-        TestableInterfaceWithDefaults impl = Confy.implement(TestableInterfaceWithDefaults.class, "test-interface-01", true);
+        TestableInterfaceWithDefaults impl = Confy.fromProperty("test-interface-01").withEnv().to(TestableInterfaceWithDefaults.class);
         float value = impl.getFloat();
     }
 
@@ -59,7 +59,7 @@ public class TestMethodProxy {
     public void testBooleanParseException() {
         // https://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html#parseBoolean(java.lang.String)
         System.setProperty("boolean", "b3");
-        TestableInterfaceWithDefaults impl = Confy.implement(TestableInterfaceWithDefaults.class, "test-interface-01", true);
+        TestableInterfaceWithDefaults impl = Confy.fromProperty("test-interface-01").withEnv().to(TestableInterfaceWithDefaults.class);
         boolean value = impl.getBoolean();
     }
 
@@ -67,7 +67,7 @@ public class TestMethodProxy {
     public void testInterfaceWithMethodsOnly() {
         String value = "10.10.10.10";
         System.setProperty("confy.host", value);
-        TestableInterfaceMethods impl = Confy.implement(TestableInterfaceMethods.class, "test-interface-01", true);
+        TestableInterfaceMethods impl = Confy.fromProperty("test-interface-01").withEnv().to(TestableInterfaceMethods.class);
         assertThat(impl.confyHost()).isEqualTo(value);
         assertThat(impl.getConfyHost()).isEqualTo(value);
         assertThat(impl.standardConfyHost()).isEqualTo(value);

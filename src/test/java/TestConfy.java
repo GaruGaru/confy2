@@ -17,7 +17,7 @@ public class TestConfy {
 
     @Test
     public void testCreationFromProperties() {
-        Confy confy = Confy.create("test-single");
+        Confy confy = Confy.fromProperty("test-single");
         assertThat(confy.get("single")).isEqualTo("1");
     }
 
@@ -25,43 +25,9 @@ public class TestConfy {
     public void testCreationFromMap() {
         Map<String, Object> map = new HashMap<>();
         map.put("test", "true");
-        Confy confy = Confy.create(map);
+        Confy confy = Confy.fromMap(map);
         assertThat(confy).isNotNull();
         assertThat(confy.toMap()).isEqualTo(map);
-    }
-
-    @Test
-    public void testCreationFromEnv() {
-        System.setProperty("test", "env");
-        Confy conf = Confy.create("test-simple-01", true);
-        assertThat(conf.get("test")).isEqualTo("env");
-    }
-
-    @Test
-    public void testCreationFromEnvWithNormalize() {
-        System.setProperty("NORMALIZED_KEY", "env");
-        Confy conf = Confy.create("test-simple-01", true);
-        assertThat(conf.get("normalized.key")).isEqualTo("env");
-    }
-
-    @Test
-    public void testCreationFromProperty() {
-        String[] keys = new String[]{"testing", "number", "name"};
-        System.setProperty("testing", "env");
-        Confy conf = Confy.create("test-simple-01", false);
-        assertThat(conf.toMap()).containsOnlyKeys(keys);
-        assertThat(conf.get("testing")).isNotEqualTo("env");
-    }
-
-
-    @Test
-    public void testCreationFromEnvAndProperty() {
-        String[] keys = new String[]{"testing", "number", "name", "conf-env"};
-        System.setProperty("testing", "env");
-        System.setProperty("conf-env", "env");
-        Confy conf = Confy.create("test-simple-01", true);
-        assertThat(conf.toMap()).containsKeys(keys);
-        assertThat(conf.get("testing")).isEqualTo("env");
     }
 
     @Test
@@ -69,6 +35,42 @@ public class TestConfy {
         assertThat(Confy.create()).isNotNull();
     }
 
+    @Test
+    public void testFluentCreateArgs() {
+        Confy confy = Confy.create()
+                .withArgs("--test=true");
+        assertThat(confy.get("test")).isEqualTo("true");
+    }
+
+    @Test
+    public void testFluentCreateEnv() {
+        System.setProperty("test", "true");
+        Confy confy = Confy.create().withEnv();
+        assertThat(confy.get("test")).isEqualTo("true");
+    }
+
+    @Test
+    public void testFluentCreateOverride() {
+        System.setProperty("test", "true");
+        Confy confy = Confy.create()
+                .withEnv()
+                .withArgs("--test=false");
+        assertThat(confy.get("test")).isEqualTo("false");
+    }
+
+    @Test
+    public void testFluentCreateProperty() {
+        System.setProperty("testing", "env");
+        Confy confy = Confy.create()
+                .withEnv()
+                .withProperty("test-simple-01");
+        assertThat(confy.get("testing")).isEqualTo("true");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testFluentCreateArgsFormatException(){
+        Confy.fromArgs("a b c");
+    }
     @Test
     public void testPut() {
         Confy confy = Confy.create();
@@ -95,25 +97,25 @@ public class TestConfy {
     }
 
     @Test
-    public void testKeyNormalizerNoOp(){
+    public void testKeyNormalizerNoOp() {
         Confy confy = Confy.create();
         assertThat(confy.normalizeKey("test")).isEqualTo("test");
     }
 
     @Test
-    public void testKeyNormalizerLower(){
+    public void testKeyNormalizerLower() {
         Confy confy = Confy.create();
         assertThat(confy.normalizeKey("TEST")).isEqualTo("test");
     }
 
     @Test
-    public void testKeyNormalizerUppercase(){
+    public void testKeyNormalizerUppercase() {
         Confy confy = Confy.create();
         assertThat(confy.normalizeKey("TEST_FORMAT")).isEqualTo("test.format");
     }
 
     @Test
-    public void testKeyNormalizerCamelCase(){
+    public void testKeyNormalizerCamelCase() {
         Confy confy = Confy.create();
         assertThat(confy.normalizeKey("TestMethod")).isEqualTo("test.method");
     }
