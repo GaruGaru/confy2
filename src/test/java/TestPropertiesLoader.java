@@ -1,6 +1,8 @@
 import it.modularity.confy.factory.PropertiesLoader;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 public class TestPropertiesLoader {
@@ -25,6 +27,11 @@ public class TestPropertiesLoader {
     @Test
     public void testLoadClassPath(){
         assertThat(PropertiesLoader.fromClassPath("test-single.properties").isPresent()).isTrue();
+    }
+
+    @Test
+    public void testLoadClassPathFail(){
+        assertThat(PropertiesLoader.fromClassPath("anbaoeri-not-exists.properties").isPresent()).isFalse();
     }
 
 }
