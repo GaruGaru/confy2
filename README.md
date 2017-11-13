@@ -45,6 +45,20 @@
     String host = conf.getHost();
     int port = conf.getPort();
 ``` 
+
+### Keys resolution using method names
+
+```java
+    public interface DatabaseConfiguration {
+    
+        @Param.String() 
+        String getDatabaseHost(); // Env: DATABASE_HOST | Property: database.host
+
+        @Param.Integer(defaultValue = 3306)
+        int getDatabasePort(); // Env: DATABASE_PORT| Property: database.port
+        
+    }
+```
    
 ### Use the same keys between env and properties!
 
@@ -79,7 +93,7 @@ Get using same key
 	<dependency>
 	    <groupId>com.github.GaruGaru</groupId>
 	    <artifactId>confy2</artifactId>
-	    <version>1.0</version>
+	    <version>1.3</version>
 	</dependency>
 	
 	
