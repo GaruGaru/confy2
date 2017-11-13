@@ -54,13 +54,6 @@ public class Confy {
         this(new HashMap<>());
     }
 
-    private Map<String, Object> normalize(Map<String, Object> source) {
-        Map<String, Object> normalized = new HashMap<>();
-        for (Map.Entry<String, Object> e : source.entrySet())
-            normalized.put(e.getKey().toLowerCase().replaceAll("_", "."), e.getValue());
-        return normalized;
-    }
-
     public Object get(String key) {
         return configMap.get(key);
     }
@@ -81,8 +74,24 @@ public class Confy {
         return new HashMap<>(configMap);
     }
 
-    public void clear(){
+    public void clear() {
         this.configMap.clear();
+    }
+
+    private Map<String, Object> normalize(Map<String, Object> source) {
+        Map<String, Object> normalized = new HashMap<>();
+        for (Map.Entry<String, Object> e : source.entrySet()) {
+            final String key = normalizeKey(e.getKey());
+            normalized.put(key, e.getValue());
+        }
+        return normalized;
+    }
+
+    public String normalizeKey(String key) {
+        return key
+                .replaceAll("([a-z])([A-Z]+)", "$1_$2")
+                .replaceAll("_", ".")
+                .toLowerCase();
     }
 
     @Override

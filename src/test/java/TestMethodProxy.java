@@ -1,3 +1,4 @@
+import interfaces.TestableInterfaceMethods;
 import interfaces.TestableInterfaceWithDefaults;
 import interfaces.TestableInterfaceWithoutKeys;
 import it.modularity.confy.Confy;
@@ -8,7 +9,7 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 public class TestMethodProxy {
 
     @Test
-    public void testInterfaceWithDefaults(){
+    public void testInterfaceWithDefaults() {
         TestableInterfaceWithDefaults impl = Confy.implement(TestableInterfaceWithDefaults.class);
         assertThat(impl.getFloat()).isEqualTo(1.5F);
         assertThat(impl.getString()).isEqualTo("default-string");
@@ -17,8 +18,8 @@ public class TestMethodProxy {
     }
 
     @Test
-    public void testInterfaceWithoutKeys(){
-        TestableInterfaceWithoutKeys impl = Confy.implement(TestableInterfaceWithoutKeys.class,"test-interface-01");
+    public void testInterfaceWithoutKeys() {
+        TestableInterfaceWithoutKeys impl = Confy.implement(TestableInterfaceWithoutKeys.class, "test-interface-01");
         assertThat(impl.getFloat()).isEqualTo(1.5F);
         assertThat(impl.getString()).isEqualTo("test");
         assertThat(impl.getInt()).isEqualTo(1);
@@ -60,6 +61,17 @@ public class TestMethodProxy {
         System.setProperty("boolean", "b3");
         TestableInterfaceWithDefaults impl = Confy.implement(TestableInterfaceWithDefaults.class, "test-interface-01", true);
         boolean value = impl.getBoolean();
+    }
+
+    @Test
+    public void testInterfaceWithMethodsOnly() {
+        String value = "10.10.10.10";
+        System.setProperty("confy.host", value);
+        TestableInterfaceMethods impl = Confy.implement(TestableInterfaceMethods.class, "test-interface-01", true);
+        assertThat(impl.confyHost()).isEqualTo(value);
+        assertThat(impl.getConfyHost()).isEqualTo(value);
+        assertThat(impl.standardConfyHost()).isEqualTo(value);
+        assertThat(impl.envConfyHost()).isEqualTo(value);
     }
 
 }

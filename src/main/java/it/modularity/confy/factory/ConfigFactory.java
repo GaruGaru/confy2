@@ -28,7 +28,7 @@ public class ConfigFactory {
         return map;
     }
 
-    public static Map<String, Object> generify(Map<String, String> stringMap) {
+    private static Map<String, Object> generify(Map<String, String> stringMap) {
         return new HashMap<>(stringMap);
     }
 

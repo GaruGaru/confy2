@@ -95,6 +95,30 @@ public class TestConfy {
     }
 
     @Test
+    public void testKeyNormalizerNoOp(){
+        Confy confy = Confy.create();
+        assertThat(confy.normalizeKey("test")).isEqualTo("test");
+    }
+
+    @Test
+    public void testKeyNormalizerLower(){
+        Confy confy = Confy.create();
+        assertThat(confy.normalizeKey("TEST")).isEqualTo("test");
+    }
+
+    @Test
+    public void testKeyNormalizerUppercase(){
+        Confy confy = Confy.create();
+        assertThat(confy.normalizeKey("TEST_FORMAT")).isEqualTo("test.format");
+    }
+
+    @Test
+    public void testKeyNormalizerCamelCase(){
+        Confy confy = Confy.create();
+        assertThat(confy.normalizeKey("TestMethod")).isEqualTo("test.method");
+    }
+
+    @Test
     public void testToString() {
         assertThat(Confy.create().toString()).isNotEmpty();
     }

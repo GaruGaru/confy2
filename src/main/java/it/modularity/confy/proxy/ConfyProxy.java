@@ -50,7 +50,7 @@ public class ConfyProxy implements InvocationHandler {
                 try {
                     Class<? extends Annotation> aClass = concrete.getClass();
                     String key = (String) aClass.getDeclaredMethod("key").invoke(concrete);
-                    key = key.isEmpty() ? keyFromMethod(method) : key;
+                    key = conf.normalizeKey(key.isEmpty() ? keyFromMethod(method) : key);
                     Object defaultValue = aClass.getDeclaredMethod("defaultValue").invoke(concrete);
                     defaultValue = Adapter.cast(defaultValue, method.getReturnType());
                     return Adapter.adapt(conf.get(key, defaultValue), method.getReturnType());
@@ -63,8 +63,8 @@ public class ConfyProxy implements InvocationHandler {
     }
 
     private String keyFromMethod(Method method) {
-        String key = method.getName().toLowerCase();
-        if(key.startsWith("get"))
+        String key = method.getName();
+        if (key.startsWith("get"))
             key = key.substring(3, key.length());
         return key;
     }
