@@ -21,7 +21,12 @@ public class TestPropertiesLoader {
 
     @Test
     public void testLoadPropertyLocal(){
-        assertThat(PropertiesLoader.fromLocal("test-single.properties").isPresent()).isFalse();
+        assertThat(PropertiesLoader.fromLocal("src/test/resources/test-single.properties").isPresent()).isTrue();
+    }
+
+    @Test
+    public void testLoadPropertyLocalNotPresent(){
+        assertThat(PropertiesLoader.fromLocal("notpresent-test-single.properties").isPresent()).isFalse();
     }
 
     @Test
@@ -33,5 +38,6 @@ public class TestPropertiesLoader {
     public void testLoadClassPathFail(){
         assertThat(PropertiesLoader.fromClassPath("anbaoeri-not-exists.properties").isPresent()).isFalse();
     }
+
 
 }
