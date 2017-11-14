@@ -8,6 +8,9 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 public class ConfyProxy implements InvocationHandler {
 
@@ -18,13 +21,16 @@ public class ConfyProxy implements InvocationHandler {
             Param.Float.class,
     };
 
+    private ProxyCache proxyCache;
+
     private final Confy conf;
 
     public ConfyProxy(Confy conf) {
         this.conf = conf;
+        this.proxyCache = ProxyCache.create(this::getParamValue);
     }
 
-    private static boolean isParam(Method method) {
+    private static boolean hasParamAnnotation(Method method) {
         for (Class<Annotation> aClass : ANNOTATIONS)
             if (method.isAnnotationPresent(aClass))
                 return true;
@@ -38,9 +44,11 @@ public class ConfyProxy implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if (!isParam(method))
+        if (!hasParamAnnotation(method))
             return method.invoke(proxy, args);
-        return getParamValue(method);
+        else {
+            return proxyCache.get(method);
+        }
     }
 
     private Object getParamValue(Method method) {
